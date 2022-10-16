@@ -49,6 +49,11 @@ when a new git tag is created in the git repo, Github notifies Jenkins that runs
 > **Tip**: The service should be available from outside the cluster, via something like:
 > curl http://hello.wefox.localhost:8081/
 
+## Define the URL for http-echo
+```console
+sudo -- sh -c "echo 127.0.0.1    hello.wefox.localhost >> /etc/hosts"
+```
+
 ## One line commands
 
 ### Minikube Dashboard
