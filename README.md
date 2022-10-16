@@ -1,3 +1,4 @@
+
 # Http-echo
 
 ## Description
@@ -22,7 +23,7 @@ The [deploying](#Deploying) section lists the commands to deploy and upgrade the
 
 ## Deploying the Jenkins helm chart
 
-We deploy **Jenkins** to automate the deployment of **http-echo**
+I deployed **Jenkins** to automate the deployment of **http-echo**
 User: **admin**
 password: **Wefoxchallenge01** 
 ```console
@@ -34,7 +35,7 @@ helm upgrade --install jenkins-admin --set controller.adminPassword=Wefoxchallen
 kubectl --namespace devops-tools port-forward svc/myjenkins 8080:8080 &
 kubectl apply -f charts/jenkins/rbac.yaml
 ```
->**Tip**: we added a service account with the needed permissions to allow Jenkins to deploy/update our Helm Chart
+>**Tip**: I added a service account with the needed permissions to allow Jenkins to deploy/update our Helm Chart
 
 ## Configure the GitHub repository
 
@@ -43,7 +44,7 @@ I generated a Personal access token (**PAT**) in the GitHub settings and added a
 ## Deploying 
 
 when a new git tag is created in the git repo, Github notifies Jenkins that runs the '**wefox-challenge**' pipeline and atuomatically deploys the **http-echo** helm chart.
->**Tip**: The git tag **must** match the **http-echo** image version since Jenkins uses it to deploy the updated **http-echo** helm chart.
+>**Tip**: The git tag **must** match the image name since Jenkins uses it.
 >
 > **Tip**: The service should be available from outside the cluster, via something like:
 > curl http://hello.wefox.localhost:8081/
@@ -68,3 +69,4 @@ minikube delete -p wefox-challenge-cluster
    [Jenkins]: <https://www.jenkins.io/>
    [Kubernetes]: <http://kubernetes.io>
    [Http echo]:<https://github.com/hashicorp/http-echo>
+
