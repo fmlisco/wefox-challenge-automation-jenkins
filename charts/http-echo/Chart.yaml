@@ -1,0 +1,5 @@
+apiVersion: v2
+description: HTTP Echo is a small go web server that serves the contents it was started with as an HTML page.
+name: http-echo
+type: application
+version: 1.0.0

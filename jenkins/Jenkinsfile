@@ -1,0 +1,43 @@
+podTemplate(label: 'mypod', serviceAccount: 'jenkins-admin', containers: [ 
+    containerTemplate(
+      name: 'kubectl-helm',
+      image: 'alpine/k8s:1.25.2',
+      resourceRequestCpu: '100m',
+      resourceLimitCpu: '1000m',
+      resourceRequestMemory: '300Mi',
+      resourceLimitMemory: '1000Mi', 
+      ttyEnabled: true, 
+      command: 'cat'
+    )
+  ],
+
+  volumes: [
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+    hostPathVolume(mountPath: '/usr/local/bin/helm', hostPath: '/usr/local/bin/helm')
+  ]
+  ) {
+    node('mypod') {
+
+        def HELM_APP_NAME = "http-echo"
+        def HELM_CHART_DIRECTORY = "charts/http-echo"
+		def APP_VERS = "0.2.1"
+
+        stage('Get latest version of code') {
+          checkout scm
+        }
+
+        stage('Deploy Charts to minikube'){
+            container('kubectl-helm'){
+				env.gittag = sh (script: "git config --global --add safe.directory '*' && git fetch --all --tags && git tag --sort=-creatordate | head -n 1", returnStdout: true)
+
+				sh """
+			        #!/bin/bash
+					helm lint ./${HELM_CHART_DIRECTORY}
+					helm upgrade --wait --timeout 60s --install -n ${HELM_APP_NAME} --create-namespace --set image.tag=$gittag ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}
+					helm list -n ${HELM_APP_NAME} | grep ${HELM_APP_NAME}
+				"""
+
+            }
+        }      
+    }
+}
