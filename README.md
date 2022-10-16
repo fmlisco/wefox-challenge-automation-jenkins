@@ -41,18 +41,20 @@ kubectl apply -f charts/jenkins/rbac.yaml
 
 I generated a Personal access token (**PAT**) in the GitHub settings and added a webhook in the GitHub repository that we are going to use (**[wefox-challenge-automation-jenkins](https://github.com/fmlisco/wefox-challenge-automation-jenkins)**)
 
+## Define the URL for http-echo
+```console
+sudo -- sh -c "echo 127.0.0.1    hello.wefox.localhost >> /etc/hosts"
+```
+
 ## Deploying 
 
-when a new git tag is created in the git repo, Github notifies Jenkins that runs the '**wefox-challenge**' pipeline and atuomatically deploys the **http-echo** helm chart.
+I have already deployed the helm chart for **http-echo** with image version **0.2.1**.
+as soon as a new git tag is created in the git repo, Github notifies Jenkins that runs the '**wefox-challenge**' pipeline and atuomatically deploys the **http-echo** helm chart.
 >**Tip**: The git tag **must** match the image name since Jenkins uses it.
 >
 > **Tip**: The service should be available from outside the cluster, via something like:
 > curl http://hello.wefox.localhost:8081/
 
-## Define the URL for http-echo
-```console
-sudo -- sh -c "echo 127.0.0.1    hello.wefox.localhost >> /etc/hosts"
-```
 
 ## One line commands
 
